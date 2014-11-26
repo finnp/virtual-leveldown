@@ -13,13 +13,18 @@ function VirtualIterator(db, options) {
   
   
   this.memIter = db._memdown.iterator(options)
-  // this.levelIter = db._leveldown.iterator(options) // segmentation fault :>
+  this.levelIter = db._leveldown.iterator(options)
   
 }
 inherits(VirtualIterator, AbstractIterator)
 
 VirtualIterator.prototype._next = function (callback) {
   this.memIter.next(callback)
+}
+
+VirtualIterator.prototype._end = function (callback) {
+  this.memIter.end(function noop(){})
+  this.levelIter.end(callback)
 }
 
 //VirtualDOWN
