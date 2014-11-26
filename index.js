@@ -13,7 +13,7 @@ function VirtualIterator(db, options) {
   
   
   this.memIter = db._memdown.iterator(options)
-  // this.levelIter = db._leveldown.iterator(options) // segmentation fault :>
+  this.levelIter = db._leveldown.iterator(options) // segmentation fault :>
   
 }
 inherits(VirtualIterator, AbstractIterator)
