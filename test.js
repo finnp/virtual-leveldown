@@ -16,3 +16,7 @@ require('abstract-leveldown/abstract/put-get-del-test').all(VirtualDOWN, test, t
 
 require('abstract-leveldown/abstract/batch-test').all(VirtualDOWN, test, testCommon)
 // require('abstract-leveldown/abstract/chained-batch-test').all(VirtualDOWN, test, testCommon)
+
+require('abstract-leveldown/abstract/close-test').close(VirtualDOWN, test, testCommon)
+
+require('abstract-leveldown/abstract/iterator-test').all(VirtualDOWN, test, testCommon)
