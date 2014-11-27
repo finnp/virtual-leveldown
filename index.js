@@ -3,6 +3,7 @@ var AbstractIterator  = require('abstract-leveldown').AbstractIterator
 var inherits = require('inherits')
 var leveldown = require('leveldown')
 var memdown = require('memdown')
+var MergeIterator = require('./merge-iterator.js')
 
 // Iterator
 
@@ -12,16 +13,18 @@ function VirtualIterator(db, options) {
   this.memIter = db._memdown.iterator(options)
   this.levelIter = db._leveldown.iterator(options)
   
+  this.iter = new MergeIterator(this.memIter, this.levelIter)
+  // reverse?
+  
 }
 inherits(VirtualIterator, AbstractIterator)
 
 VirtualIterator.prototype._next = function (callback) {
-  this.memIter.next(callback)
+  this.iter.next(callback)
 }
 
 VirtualIterator.prototype._end = function (callback) {
-  this.memIter.end(function noop(){})
-  this.levelIter.end(callback)
+  this.iter.end(callback)
 }
 
 //VirtualDOWN
@@ -40,11 +43,25 @@ function VirtualDOWN(location) {
 }
 
 VirtualDOWN.prototype._open = function (options, callback) {
-  this._leveldown.open(options, callback)
+  var count = 0
+  this._memdown.open(options, afterOpen)
+  this._leveldown.open(options, afterOpen)
+  
+  function afterOpen(err) {
+    if(err) return callback(err)
+    if(++count === 2) callback()
+  }
 }
 
-VirtualDOWN.prototype._close = function (options, callback) {
-  this._leveldown.close(options, callback)
+VirtualDOWN.prototype._close = function (callback) {
+  var count = 0
+  this._memdown.close(afterClose)
+  this._leveldown.close(afterClose)
+  
+  function afterClose(err) {
+    if(err) return callback(err)
+    if(++count === 2) callback()
+  }
 }
 
 VirtualDOWN.prototype._get = function (key, options, callback) {
