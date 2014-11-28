@@ -8,7 +8,7 @@ function MergeIterator(options, iter0, iter1) {
     {iter: iter0, current: false, ended: false, id: 0},
     {iter: iter1, current: false, ended: false, id: 1}
   ]
-  this.options = options
+  this.reverse = options.reverse
 }
 
 MergeIterator.prototype.next = function (callback) {
@@ -34,7 +34,7 @@ MergeIterator.prototype.next = function (callback) {
 
     var nextEntry
     var nextId
-    
+
     var compare = this.reverse ? greater : smaller
     
     if(notEnded.length === 1) {
@@ -66,7 +66,7 @@ function smaller(a, b) {
 }
 
 function greater(a, b) {
-  return b > a
+  return a > b
 }
 
 

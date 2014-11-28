@@ -105,12 +105,36 @@ test('working with original copy', function (t) {
     
     var expected = [
       { key: '01', value: 'cat'},
-      { key: '04', value: 'kissa' },
+      { key: '04', value: 'kissa'},
       { key: '05', value: 'chat' }
     ]
     
     virtualDB.open(function () {
       var iterator = virtualDB.iterator({keyAsBuffer: false, valueAsBuffer: false})
+      testCommon.collectEntries(iterator, function (err, entries) {
+        t.notOk(err, 'no err')
+        t.equals(expected.length, entries.length, 'correct number of entries')
+        entries.forEach(function (e, index) {
+          t.equals(e.key.toString(), expected[index].key, 'correct key')
+          t.equals(e.value.toString(), expected[index].value, 'correct value')
+        })
+        virtualDB.close(function () {
+          t.end()
+        })
+      })
+    })
+  })
+  
+  t.test('iterator reverse', function (t) {
+    
+    var expected = [
+    { key: '05', value: 'chat' },
+    { key: '04', value: 'kissa'},
+    { key: '01', value: 'cat'}
+    ]
+    
+    virtualDB.open(function () {
+      var iterator = virtualDB.iterator({reverse: true, keyAsBuffer: false, valueAsBuffer: false})
       testCommon.collectEntries(iterator, function (err, entries) {
         t.notOk(err, 'no err')
         t.equals(expected.length, entries.length, 'correct number of entries')
