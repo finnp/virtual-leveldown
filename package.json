@@ -17,5 +17,17 @@
   "devDependencies": {
     "rimraf": "^2.2.8",
     "tape": "^3.0.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/finnp/virtual-leveldown.git"
+  },
+  "keywords": [
+    "virtual",
+    "level"
+  ],
+  "bugs": {
+    "url": "https://github.com/finnp/virtual-leveldown/issues"
+  },
+  "homepage": "https://github.com/finnp/virtual-leveldown"
 }
