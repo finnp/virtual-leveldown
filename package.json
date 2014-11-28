@@ -1,7 +1,7 @@
 {
   "name": "virtual-leveldown",
   "version": "1.0.0",
-  "description": "$ dat import invalid.json —dry-run # do dat import, but with require(‘memdown’) 1. when dat does a .get or .createReadStream use require(‘leveldown’) 2. when dat does a .put or .createWriteStream, use require(‘memdown’) virtual-leveldown   - on first read, read from actual backend   - on all subsequent reads, or any writes, only touch in-memory copy",
+  "description": "Use a leveldb instance virtually without changing the original",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"
