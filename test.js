@@ -24,6 +24,7 @@ require('abstract-leveldown/abstract/iterator-test').all(VirtualDOWN, test, test
 var level = require('leveldown')
 test('working with original copy', function (t) {
   var location = testCommon.location()
+  var virtualDB = VirtualDOWN(location)
   
   var testData = [
     {type: 'put', key: '01', value: 'cat'},
@@ -44,7 +45,6 @@ test('working with original copy', function (t) {
   })
   
   t.test('get original values', function (t) {
-    var virtualDB = VirtualDOWN(location)
     virtualDB.open(function () {
       virtualDB.get('01',function (err, value) {
         t.notOk(err, 'no error')
@@ -56,9 +56,7 @@ test('working with original copy', function (t) {
     })  
   })
   
-  t.test('put new value', function (t) {
-    var virtualDB = VirtualDOWN(location)
-    
+  t.test('put new value', function (t) {    
     virtualDB.open(function () {
       virtualDB.put('04', 'kissa', function () {
         virtualDB.get('04', {asBuffer: false}, function (err, value) {
@@ -72,8 +70,6 @@ test('working with original copy', function (t) {
   })
   
   t.test('del value', function (t) {
-    var virtualDB = VirtualDOWN(location)
-    
     virtualDB.open(function () {
       virtualDB.del('02', function () {
         virtualDB.get('02', {asBuffer: false}, function (err, value) {
@@ -87,7 +83,6 @@ test('working with original copy', function (t) {
   })
   
   t.test('batch del/put', function (t) {
-    var virtualDB = VirtualDOWN(location)
     
     var changes = [
       {type: 'del', key: '03'},
@@ -107,7 +102,6 @@ test('working with original copy', function (t) {
   })
   
   t.test('iterator', function (t) {
-    var virtualDB = VirtualDOWN(location)
     
     var expected = [
       { key: '01', value: 'cat'},
@@ -116,7 +110,7 @@ test('working with original copy', function (t) {
     ]
     
     virtualDB.open(function () {
-      var iterator = virtualDB.iterator()
+      var iterator = virtualDB.iterator({keyAsBuffer: false, valueAsBuffer: false})
       testCommon.collectEntries(iterator, function (err, entries) {
         t.notOk(err, 'no err')
         t.equals(expected.length, entries.length, 'correct number of entries')

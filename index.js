@@ -12,15 +12,20 @@ function VirtualIterator(db, options) {
   
   this.memIter = db._memdown.iterator(options)
   this.levelIter = db._leveldown.iterator(options)
-  
-  this.iter = new MergeIterator(this.memIter, this.levelIter)
-  // reverse?
-  
+  this.iter = new MergeIterator(options, this.memIter, this.levelIter)
 }
 inherits(VirtualIterator, AbstractIterator)
 
 VirtualIterator.prototype._next = function (callback) {
-  this.iter.next(callback)
+  var inMemory = this.db._inMemory
+  var self = this
+  this.iter.next(function (err, key, value, index) {
+    if(err) return callback(err)
+    if(index && inMemory[key]) // skip
+      return self._next(callback)
+      
+    callback.apply(this, arguments)
+  })
 }
 
 VirtualIterator.prototype._end = function (callback) {
@@ -65,10 +70,12 @@ VirtualDOWN.prototype._close = function (callback) {
 }
 
 VirtualDOWN.prototype._get = function (key, options, callback) {
+  // TODO : cache here
   if(this._inMemory[key]) {
     this._memdown.get(key, options, callback)
   } else {
-    this._inMemory[key] = true
+    // this._inMemory[key] = true
+    // put memdown
     this._leveldown.get(key, options, callback)
   }
 }
