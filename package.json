@@ -9,10 +9,8 @@
   "author": "Finn Pauls",
   "license": "MIT",
   "dependencies": {
-    "abstract-leveldown": "^2.1.0",
-    "inherits": "^2.0.1",
     "leveldown": "^1.0.0",
-    "memdown": "^1.0.0"
+    "virtualdown": "^1.0.0"
   },
   "devDependencies": {
     "rimraf": "^2.2.8",

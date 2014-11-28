@@ -9,6 +9,10 @@ in memory, so that the original leveldb instance remains unchanged.
 
 Install with `npm install virtual-leveldown`
 
+Note that this is only a 3-lines tiny wrapper around [virtualdown](http://github.com/finnp/virtualdown),
+that already ships with leveldown. 
+
+
 ## example
 
 ```js
