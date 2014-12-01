@@ -13,6 +13,7 @@
     "virtualdown": "^1.0.0"
   },
   "devDependencies": {
+    "abstract-leveldown": "^2.1.0",
     "rimraf": "^2.2.8",
     "tape": "^3.0.3"
   },
